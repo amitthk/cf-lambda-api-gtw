@@ -1,0 +1,6 @@
+export DownloadS3Bucket='lambda.atksv.mywire.org'
+export LambdaCodeBucket='atksv.mywire.org'
+export LambdaS3Key='aws/lambda/s3downloader/s3downloader.zip'
+export AwsIAMDeploymentProfile='amitthk_deployadmin'
+export AwsCFDeployStackName='s3uploader'
+export AWS_DEFAULT_REGION='ap-southeast-1'

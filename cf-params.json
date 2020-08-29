@@ -1,0 +1,14 @@
+[
+    {"ParameterKey": "LambdaCodeBucket",
+        "ParameterValue": "atksv.mywire.org"
+    },
+    {"ParameterKey": "DownloadS3Bucket",
+        "ParameterValue": "lambda.atksv.mywire.org"
+    },
+    {"ParameterKey": "LambdaS3Key",
+        "ParameterValue": "aws/lambda/s3downloader/s3downloader.zip"
+    },
+    {"ParameterKey": "Region",
+        "ParameterValue": "ap-southeast-1"
+    }
+]
