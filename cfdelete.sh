@@ -1,7 +1,12 @@
 #!/bin/bash -xe
 BASE_DIR=$(pwd)
 
-source venv/Scripts/activate
+if [ -f "${BASE_DIR}/venv/Scripts/activate" ]
+then
+    source venv/Scripts/activate
+else
+    source venv/bin/activate
+fi
 
 source ${BASE_DIR}/deployenv.sh
 

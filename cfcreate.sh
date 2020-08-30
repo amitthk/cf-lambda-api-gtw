@@ -1,16 +1,28 @@
 #!/bin/bash -xe
 BASE_DIR=$(pwd)
 
+rm -rf "${BASE_DIR}/venv"
 if [ ! -d "${BASE_DIR}/venv" ]
 then
     echo "=== virtual environment does not exist so creating it ===> "
     python -m virtualenv venv
-    source venv/Scripts/activate
+    if [ -f "${BASE_DIR}/venv/Scripts/activate" ]
+    then
+        source venv/Scripts/activate
+    else
+        source venv/bin/activate
+    fi
     pip install -r requirements.txt
     deactivate
 fi
 
-source venv/Scripts/activate
+if [ -f "${BASE_DIR}/venv/Scripts/activate" ]
+then
+    source venv/Scripts/activate
+else
+    source venv/bin/activate
+fi
+
 pip install -r requirements.txt
 
 echo "=== Packaging Lambda ===> "
