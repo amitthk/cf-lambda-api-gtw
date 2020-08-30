@@ -21,19 +21,19 @@ then
 else
     source venv/bin/activate
 fi
-
 pip install -r requirements.txt
 
-echo "=== Packaging Lambda ===> "
+
+echo "=== Repackaging lambda code ===> "
 cd ${BASE_DIR}/s3downloader
 mkdir -p ${BASE_DIR}/dist
 zip -r ${BASE_DIR}/dist/s3downloader.zip .
 
-echo "=== Deploying stack ===> "
+echo "=== Updating lambda code ===> "
 cd ${BASE_DIR}
 source ${BASE_DIR}/deployenv.sh
 aws --region=${AWS_DEFAULT_REGION} --profile=${AwsIAMDeploymentProfile} s3 cp ${BASE_DIR}/dist/s3downloader.zip s3://${LambdaCodeBucket}/${LambdaS3Key}
 
-aws --region=${AWS_DEFAULT_REGION} --profile=${AwsIAMDeploymentProfile} cloudformation create-stack --capabilities=CAPABILITY_NAMED_IAM --stack-name=${AwsCFDeployStackName} --template-body file://cf-template.yml --parameters file://cf-params.json
-aws --region=${AWS_DEFAULT_REGION} --profile=${AwsIAMDeploymentProfile} cloudformation wait stack-create-complete --stack-name=${AwsCFDeployStackName}
-aws --region=${AWS_DEFAULT_REGION} --profile=${AwsIAMDeploymentProfile} cloudformation describe-stacks  --stack-name=${AwsCFDeployStackName}
+aws --region=${AWS_DEFAULT_REGION} --profile=${AwsIAMDeploymentProfile} lambda update-function-code \
+    --function-name  ${LambdaFunctionName} \
+    --s3-bucket=${LambdaCodeBucket} --s3-key=${LambdaS3Key}
