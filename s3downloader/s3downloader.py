@@ -42,7 +42,7 @@ def download_url(event, context):
                 'mode': 'standard'
             }
         )
-        client_s3 = boto3.client('s3',region_config)
+        client_s3 = boto3.client('s3',config=region_config)
 
         object_url = event["object_url"]
 
