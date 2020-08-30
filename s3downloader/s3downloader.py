@@ -18,8 +18,12 @@ def download_url(event, context):
     try:
         s3_client = boto3.resource('s3')
         client_s3 = boto3.client('s3')
-        object_url = event["object_url"].upper()
-        dest_bucket = event["dest_bucket"].upper()
+        object_url = event["object_url"]
+
+        if event["dest_bucket"] is not None:
+            dest_bucket = event["dest_bucket"]
+        else:
+            dest_bucket = "lambda.atksv.mywire.org"
 
         bucket = s3_client.Bucket(dest_bucket)
 
