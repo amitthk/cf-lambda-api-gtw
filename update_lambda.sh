@@ -28,6 +28,8 @@ echo "=== Repackaging lambda code ===> "
 cd ${BASE_DIR}/s3downloader
 mkdir -p ${BASE_DIR}/dist
 zip -r ${BASE_DIR}/dist/s3downloader.zip .
+cd ${BASE_DIR}/venv/lib/python* && cd site-packages
+zip -gr ${BASE_DIR}/dist/s3downloader.zip .
 
 echo "=== Updating lambda code ===> "
 cd ${BASE_DIR}
