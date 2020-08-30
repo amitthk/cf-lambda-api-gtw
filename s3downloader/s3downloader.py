@@ -1,4 +1,5 @@
 import boto3
+from botocore.config import Config
 import requests
 import sys, time
 from io import BytesIO
@@ -33,7 +34,16 @@ def write_to_file(file_name,f_output):
 def download_url(event, context):
     try:
         # resource_s3 = boto3.resource('s3')
-        client_s3 = boto3.client('s3')
+
+        region_config = Config(
+            region_name = 'ap-southeast-1',
+            retries = {
+                'max_attempts': 10,
+                'mode': 'standard'
+            }
+        )
+        client_s3 = boto3.client('s3',region_config)
+
         object_url = event["object_url"]
 
         if event["dest_bucket"] is not None:
