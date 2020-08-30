@@ -4,7 +4,7 @@ BASE_DIR=$(pwd)
 if [ ! -d "${BASE_DIR}/venv" ]
 then
     echo "=== virtual environment does not exist so creating it ===> "
-    python -m virtualenv venv
+    python3 -m venv venv
     if [ -f "${BASE_DIR}/venv/Scripts/activate" ]
     then
         source venv/Scripts/activate
