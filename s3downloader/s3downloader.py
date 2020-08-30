@@ -3,7 +3,10 @@ import requests
 import sys, time
 from io import BytesIO
 from pathlib import Path
-from urlparse import urlparse
+try:
+    from urlparse import urlparse
+except ImportError as er:
+    from urllib.parse import urlparse
 import wget
 
 CONST_RETRY_COUNT = 5
@@ -16,7 +19,7 @@ def write_to_file(file_name,f_output):
 
 def download_url(event, context):
     try:
-        s3_client = boto3.resource('s3')
+        # resource_s3 = boto3.resource('s3')
         client_s3 = boto3.client('s3')
         object_url = event["object_url"]
 
@@ -25,11 +28,11 @@ def download_url(event, context):
         else:
             dest_bucket = "lambda.atksv.mywire.org"
 
-        bucket = s3_client.Bucket(dest_bucket)
+        # bucket = resource_s3.Bucket(dest_bucket)
 
         parsed_url = urlparse(object_url)
         dest_path = parsed_url.path
-        dest_suffix = dest_path.rpartition('/')[1]
+        dest_suffix = dest_path.split('/')[-1]
         tmp_path = "/tmp/{0}".format(dest_suffix)
         
         print(tmp_path)
@@ -44,7 +47,7 @@ def download_url(event, context):
                 print("=====Uploading {0} to {1}=====>".format(tmp_path,dest_bucket))
                 with open(tmp_path) as upl_file:
                     obj = upl_file.read()
-                    s3_client.put_object(Body=obj,Bucket=dest_bucket, Key=dest_path)
+                    client_s3.put_object(Body=obj,Bucket=dest_bucket, Key=dest_path)
                 break
             except BaseException as e:
                 retry_count-=1
