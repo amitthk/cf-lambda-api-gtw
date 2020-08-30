@@ -58,7 +58,7 @@ def download_url(event, context):
                 print("=====Saving {0} to {1}=====>".format(object_url,tmp_path))
                 wget.download(object_url,tmp_path)
                 print("=====Uploading {0} to {1}=====>".format(tmp_path,dest_bucket))
-                with open(tmp_path) as upl_file:
+                with open(tmp_path, mode='rb') as upl_file:
                     obj = upl_file.read()
                     client_s3.put_object(Body=obj,Bucket=dest_bucket, Key=dest_path)
                 break
