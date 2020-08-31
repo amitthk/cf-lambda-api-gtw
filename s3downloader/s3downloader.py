@@ -1,7 +1,7 @@
 import boto3
 from botocore.config import Config
 import requests
-import sys, time
+import sys, time, glob, os
 from io import BytesIO
 from pathlib import Path
 try:
@@ -56,7 +56,8 @@ def download_url(event, context):
         parsed_url = urlparse(object_url)
         dest_path = parsed_url.path
         dest_suffix = dest_path.split('/')[-1]
-        tmp_path = "/tmp/{0}".format(dest_suffix)
+        tmp_path1 = "/tmp/{0}".format(dest_suffix)
+        tmp_path = tmp_path1.replace('//','/')
         
         print(tmp_path)
 
@@ -65,7 +66,12 @@ def download_url(event, context):
         while retry_count >= 0:
             time.sleep(3) # wait 3 seconds then try again
             try:
+                print("=====clean up /tmp/*=====>")
+                files = glob.glob('/tmp/*')
+                for f in files:
+                    os.remove(f)
                 print("=====Saving {0} to {1}=====>".format(object_url,tmp_path))
+
                 wget.download(object_url,tmp_path)
                 print("=====Uploading {0} to {1}=====>".format(tmp_path,dest_bucket))
                 with open(tmp_path, mode='rb') as upl_file:
