@@ -26,7 +26,7 @@ Resources:
       BucketName:
         Ref: DownloadS3Bucket
       VersioningConfiguration:
-        Status: Disabled
+        Status: Suspended
   IAMLambdaServiceRole:
     Type: AWS::IAM::Role
     Properties:

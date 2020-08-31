@@ -30,6 +30,9 @@ def write_to_file(file_name,f_output):
     with open(file_name,'w') as f:
         f.write(f_output)
 
+def trim_start(inputstring, string_to_remove):
+    return inputstring[len(string_to_remove):] if inputstring.startswith(string_to_remove) else inputstring
+
 
 def download_url(event, context):
     try:
@@ -55,10 +58,10 @@ def download_url(event, context):
 
         parsed_url = urlparse(object_url)
         dest_path = parsed_url.path
+        dest_bucket_path=trim_start(dest_path.replace('//','/'),'/')
         dest_suffix = dest_path.split('/')[-1]
-        tmp_path1 = "/tmp/{0}".format(dest_suffix)
-        tmp_path = tmp_path1.replace('//','/')
-        
+        tmp_path = "/tmp/{0}".format(dest_suffix)
+
         print(tmp_path)
 
         retry_count = CONST_RETRY_COUNT
@@ -76,7 +79,7 @@ def download_url(event, context):
                 print("=====Uploading {0} to {1}=====>".format(tmp_path,dest_bucket))
                 with open(tmp_path, mode='rb') as upl_file:
                     obj = upl_file.read()
-                    client_s3.put_object(Body=obj,Bucket=dest_bucket, Key=dest_path)
+                    client_s3.put_object(Body=obj,Bucket=dest_bucket, Key=dest_bucket_path)
                 break
             except BaseException as e:
                 retry_count-=1
